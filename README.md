@@ -8,7 +8,7 @@ This end-to-end data pipeline proves a specific macroeconomic thesis: **The AI d
 ---
 
 ### 📊 Dashboard Preview
-[<img width="1178" height="736" alt="Semiconductor project preview" src="https://github.com/user-attachments/assets/d1bfecae-5cb2-48e2-8791-40d76a16efd4" />
+[<img width="1178" height="736" alt="Semiconductor project preview" src="https://github.com/user-attachments/assets/61b78865-bc2f-461b-9dd9-0e4b4954f16b" />
 ]
 
 *Interactive BI dashboard tracking the financial and physical shift from Consumer PCs to Enterprise AI.*
@@ -30,52 +30,36 @@ The relational database (`SemiConductorDB`) consists of 5 interconnected tables 
 
 **ETL Execution:** Raw financial CSVs were ingested into temporary staging tables, cleaned, and surgically inserted into the master schema via T-SQL to guarantee data integrity.
 
-[<img width="917" height="717" alt="Importing CSV" src="https://github.com/user-attachments/assets/ff158087-dbb1-4f8c-bf62-0d9d6c98f65d" />
+[<img width="917" height="717" alt="Importing CSV" src="https://github.com/user-attachments/assets/8b84e28e-b764-4d94-8128-d4dad7c71690" />
 ]
 
 ---
 
 ### 💻 Core Engineering: The Relational Link
-To ensure the data model was structurally sound before visualization, I wrote a 4-table `JOIN` to aggregate 5 years of stock volume and map it directly to the flagship hardware of each manufacturer.
+To ensure the data model was structurally sound, I engineered a master 4-table `JOIN` query to aggregate 5 years of stock volume and map it directly to the physical hardware specs of each manufacturer's flagship chip.
 
-```sql
-SELECT 
-    c.CompanyName,
-    cs.ModelName AS Flagship_Chip,
-    cs.TransistorCount_Billions,
-    pb.Processing_Power_Teraflops,
-    CAST(AVG(sp.ClosePrice) AS DECIMAL(10,2)) AS Avg_Stock_Price_5YR,
-    FORMAT(SUM(CAST(sp.TradingVolume AS BIGINT)), 'N0') AS Total_Trading_Volume
-FROM Companies c
-JOIN CPU_Specs cs ON c.Ticker = cs.Ticker
-JOIN Performance_Benchmarks pb ON cs.ChipID = pb.ChipID
-JOIN Stock_Prices sp ON c.Ticker = sp.Ticker
-GROUP BY 
-    c.CompanyName, cs.ModelName, cs.TransistorCount_Billions, pb.Processing_Power_Teraflops
-ORDER BY cs.TransistorCount_Billions DESC;
-Output:
-
-[<img width="1902" height="976" alt="THE CROWN JEWEL (HOPEFULLY)" src="https://github.com/user-attachments/assets/2f45e8c6-f054-4599-80e8-5078efe2e21f" />
+[<img width="1902" height="976" alt="THE CROWN JEWEL (HOPEFULLY)" src="https://github.com/user-attachments/assets/af808032-4185-4615-84c4-d6add6fe4e6e" />
 ]
 
-This query isolates the exact correlation between engineering complexity (80B Transistors on the H100) and disproportionate market trading volume.
+*The resulting output isolates the exact correlation between engineering complexity (e.g., the 80 Billion Transistors on the H100) and disproportionate market trading volume.*
 
-📈 Business Intelligence Insights
+---
+
+### 📈 Business Intelligence Insights
 The Power BI visualization layer exposes the reality of the 2026 hardware market:
+* **The Fabrication Squeeze:** A Donut Chart analysis proves the vast majority of capital is aggressively chasing 3nm and 4nm nodes, starving consumer PC components of necessary manufacturing capacity.
+* **The Complexity Gap:** A Bubble Chart maps the physical dominance of AI chips over consumer chips, validating why capital has abandoned the PC sector.
+* **The Conclusion:** Foundries are prioritizing high-margin AI data center chips over consumer CPUs. PC gamers and builders aren't just paying for silicon; they are paying a "scarcity tax."
 
-The Fabrication Squeeze: A Donut Chart analysis proves the vast majority of capital is aggressively chasing 3nm and 4nm nodes, starving consumer PC components of necessary manufacturing capacity.
-
-The Complexity Gap: A Bubble Chart maps the physical dominance of AI chips over consumer chips, validating why capital has abandoned the PC sector.
-
-The Conclusion: Foundries are prioritizing high-margin AI data center chips over consumer CPUs. PC gamers and builders aren't just paying for silicon; they are paying a "scarcity tax."
-
-[<img width="1902" height="968" alt="Bubble chart" src="https://github.com/user-attachments/assets/90d1be40-6b64-4387-94f3-e93a5463f548" />
+[<img width="1902" height="968" alt="Bubble chart" src="https://github.com/user-attachments/assets/36bd20a1-ebcb-4a21-82b9-719bf9cb58d4" />
 ]
 
-📂 Repository Assets
-💾 Database Blueprint: [👉 HIGHLIGHT THIS TEXT AND DRAG YOUR "SemiConductor_Project_Final.sql" FILE HERE 👈]
-(Full Schema & Data export. Run in SSMS to recreate the environment).
+---
 
-📊 Live Dashboard: [👉 
-]
-(The interactive Power BI file).
+### 📂 Repository Assets
+
+* 💾 **Database Blueprint:** [Download the SQL Schema & Data](SemiConductor_Project_Final.sql) 
+  *(Full Schema & Data export. Run in SSMS to recreate the environment).*
+
+* 📊 **Live Dashboard:** [Download the Power BI Dashboard](Semiconductor%20Market%20analysis.pbix)
+  *(The interactive Power BI file).*
